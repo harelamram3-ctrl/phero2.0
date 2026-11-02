@@ -1,0 +1,75 @@
+# SuperHeroes 2.0 configuration
+settings:
+  # Worlds where powers are disabled
+  disabled-worlds: []
+  # Multiplies ALL ability damage (1.0 = default)
+  damage-multiplier: 1.0
+  # Multiplies ALL cooldowns (0.5 = half cooldowns)
+  cooldown-multiplier: 1.0
+  # Ultimate charge needed (percent points) and gain per damage point dealt
+  ultimate-charge-max: 100
+  ultimate-charge-per-damage: 2.5
+  ultimate-charge-per-kill: 25
+  # Keep selected hero after death / restart
+  keep-hero-on-death: true
+  # Can heroes' abilities hurt other players? (false = only mobs)
+  pvp-abilities: true
+  # Show the ultimate-charge boss bar
+  show-bossbar: true
+
+# Per-hero overrides. Leave out any hero to use defaults.
+heroes:
+  BATMAN:        { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  BLACKPANTHER:  { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  CAPTAINAMERICA: { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  DEADPOOL:      { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  DOCTORSTRANGE: { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  FLASH:         { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  GREENLANTERN:  { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  HULK:          { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  IRONMAN:       { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  SPIDERMAN:     { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  STORM:         { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  SUPERMAN:      { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  THOR:          { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  WONDERWOMAN:   { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  WOLVERINE:     { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  AQUAMAN:       { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  CAPTAINMARVEL: { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+  SCARLETWITCH:  { enabled: true, damage-multiplier: 1.0, cooldown-multiplier: 1.0 }
+
+# Hero progression
+progression:
+  enabled: true
+  max-level: 50
+  xp-per-level: 150
+  xp-per-damage: 1.0
+  xp-per-kill: 30
+  # Additional ability damage per level (0.01 = +1% per level), capped at 20 levels above level 1
+  damage-per-level: 0.01
+
+# Hero skins (requires SkinsRestorer installed on the server).
+# Commands are executed by console. Use {player} and {skin} placeholders.
+skins:
+  warn-if-missing: true
+  apply-command: "skin set {skin} {player}"
+  reset-command: "skin clear {player}"
+  heroes:
+    BATMAN: "Batman"
+    BLACKPANTHER: "BlackPanther"
+    CAPTAINAMERICA: "CaptainAmerica"
+    DEADPOOL: "Deadpool"
+    DOCTORSTRANGE: "DoctorStrange"
+    FLASH: "TheFlash"
+    GREENLANTERN: "GreenLantern"
+    HULK: "Hulk"
+    IRONMAN: "IronMan"
+    SPIDERMAN: "SpiderMan"
+    STORM: "Storm"
+    SUPERMAN: "Superman"
+    THOR: "Thor"
+    WONDERWOMAN: "WonderWoman"
+    WOLVERINE: "Wolverine"
+    AQUAMAN: "Aquaman"
+    CAPTAINMARVEL: "CaptainMarvel"
+    SCARLETWITCH: "ScarletWitch"
