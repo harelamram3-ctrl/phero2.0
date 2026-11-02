@@ -367,7 +367,8 @@ final class Abilities {
             line(p.getWorld(), origin, end, Particle.CLOUD);
             p.getWorld().spawnParticle(Particle.CRIT, end, 18, 0.35, 0.45, 0.35, 0.08);
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 5, false, true, true));
-            target.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 60, 128, false, false, true));
+            // תיקון השגיאה כאן למטה: PotionEffectType.JUMP השתנה ל-PotionEffectType.JUMP_BOOST
+            target.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 60, 128, false, false, true));
             hurt(p, target, 2.0);
             Vector pull = p.getLocation().add(0, 0.8, 0).toVector()
                     .subtract(target.getLocation().toVector());
@@ -599,52 +600,40 @@ final class Abilities {
         RayTraceResult er = p.getWorld().rayTraceEntities(eye, eye.getDirection(), range, 0.6,
                 e -> e instanceof LivingEntity && !e.equals(p) && !(e instanceof ArmorStand) && pl.canHurt(p, (LivingEntity) e));
         if (er == null) return null;
-        RayTraceResult br = p.getWorld().rayTraceBlocks(eye, eye.getDirection(), range, FluidCollisionMode.NEVER, true);
-        if (br != null && br.getHitPosition().distance(eye.toVector()) < er.getHitPosition().distance(eye.toVector())) return null;
+        RayTraceResult br = p.getWorld().rayTraceBlocks(eye, eye.getDirection(), range, FluidCollisionMode.NEVER);
+        if (br != null && br.getHitPosition().distance(eye.toVector()) < er.getHitPosition().distance(eye.toVector())) {
+            return null;
+        }
         return er;
     }
 
-    private Location aimPoint(Player p, double range) {
-        RayTraceResult er = traceEntity(p, range);
-        if (er != null) return er.getHitPosition().toLocation(p.getWorld());
-        Block b = p.getTargetBlockExact((int) range);
+    private void line(World w, Location from, Location to, Particle part) {
+        Vector dir = to.toVector().subtract(from.toVector());
+        double dist = dir.length();
+        dir.normalize();
+        for (double d = 0; d <= dist; d += 0.4) {
+            Location loc = from.clone().add(dir.clone().multiply(d));
+            w.spawnParticle(part, loc, 1, 0, 0, 0, 0);
+        }
+    }
+
+    private void portal(World w, Location loc) {
+        w.spawnParticle(Particle.PORTAL, loc.clone().add(0, 1, 0), 40, 0.5, 1, 0.5, 0.5);
+    }
+
+    private void ring(World w, Location center, double radius, Color color, int points) {
+        for (int i = 0; i < points; i++) {
+            double angle = 2 * Math.PI * i / points;
+            double x = Math.cos(angle) * radius;
+            double z = Math.sin(angle) * radius;
+            Location l = center.clone().add(x, 0.1, z);
+            w.spawnParticle(Particle.DUST, l, 1, 0, 0, 0, 0, new Particle.DustOptions(color, 1.2f));
+        }
+    }
+
+    private Location aimPoint(Player p, double maxRange) {
+        Block b = p.getTargetBlockExact((int) maxRange);
         if (b != null) return b.getLocation().add(0.5, 1, 0.5);
-        return p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(range * 0.6));
-    }
-
-    void beam(Player p, Vector dir, double range, Color color, double base, boolean fire) {
-        World w = p.getWorld();
-        Location eye = p.getEyeLocation();
-        Vector d = dir.clone().normalize();
-        Set<UUID> hit = new HashSet<>();
-        for (double t = 1; t <= range; t += 0.5) {
-            Location l = eye.clone().add(d.clone().multiply(t));
-            if (l.getBlock().getType().isSolid()) { w.spawnParticle(Particle.EXPLOSION, l, 1); break; }
-            w.spawnParticle(Particle.DUST, l, 2, 0.05, 0.05, 0.05, 0, new Particle.DustOptions(color, 1.4f));
-            for (LivingEntity e : targets(p, l, 1.0)) if (hit.add(e.getUniqueId())) { hurt(p, e, base); if (fire) e.setFireTicks(80); }
-        }
-    }
-
-    private void line(World w, Location a, Location b, Particle part) {
-        Vector v = b.toVector().subtract(a.toVector());
-        double len = v.length();
-        if (len < 0.1) return;
-        v.normalize();
-        for (double t = 0; t < len; t += 0.6) w.spawnParticle(part, a.clone().add(v.clone().multiply(t)), 1, 0, 0, 0, 0);
-    }
-
-    private void ring(World w, Location c, double r, Color col, int n) {
-        Particle.DustOptions o = new Particle.DustOptions(col, 1.6f);
-        for (int i = 0; i < n; i++) {
-            double a = 2 * Math.PI * i / n;
-            w.spawnParticle(Particle.DUST, c.clone().add(Math.cos(a) * r, 0.2, Math.sin(a) * r), 1, 0, 0, 0, 0, o);
-        }
-    }
-
-    private void portal(World w, Location c) {
-        for (int i = 0; i < 40; i++) {
-            double a = 2 * Math.PI * i / 40;
-            w.spawnParticle(Particle.WITCH, c.clone().add(Math.cos(a) * 1.0, 1 + Math.sin(a) * 1.0, 0), 2, 0.05, 0.05, 0.05, 0);
-        }
+        return p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(maxRange));
     }
 }
