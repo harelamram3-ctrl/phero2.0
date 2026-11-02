@@ -367,7 +367,6 @@ final class Abilities {
             line(p.getWorld(), origin, end, Particle.CLOUD);
             p.getWorld().spawnParticle(Particle.CRIT, end, 18, 0.35, 0.45, 0.35, 0.08);
             target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 5, false, true, true));
-            // תיקון השגיאה כאן למטה: PotionEffectType.JUMP השתנה ל-PotionEffectType.JUMP_BOOST
             target.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 60, 128, false, false, true));
             hurt(p, target, 2.0);
             Vector pull = p.getLocation().add(0, 0.8, 0).toVector()
@@ -420,7 +419,6 @@ final class Abilities {
             p.setVelocity(velocity);
             p.setFallDistance(0);
 
-            // A segmented-looking rope made from particles, refreshed every tick.
             Location from = p.getEyeLocation();
             Vector rope = anchor.toVector().subtract(from.toVector());
             int points = Math.max(2, Math.min(18, (int) (rope.length() * 1.4)));
@@ -593,6 +591,18 @@ final class Abilities {
             e.setVelocity(away.normalize().multiply(kb).setY(0.35 + kb * 0.1));
         }
         if (sphereFx) w.spawnParticle(part, c.clone().add(0, 1, 0), (int) Math.min(120, 20 + r * 8), r / 3, 0.6, r / 3, 0.05);
+    }
+
+    private void beam(Player p, Vector dir, double range, Color color, int particles, boolean sonicBoom) {
+        World w = p.getWorld();
+        Location start = p.getEyeLocation();
+        for (double d = 0; d <= range; d += 0.5) {
+            Location loc = start.clone().add(dir.clone().multiply(d));
+            w.spawnParticle(Particle.DUST, loc, particles, 0.1, 0.1, 0.1, 0, new Particle.DustOptions(color, 1.0f));
+            for (LivingEntity e : targets(p, loc, 1.0)) {
+                hurt(p, e, 6.0);
+            }
+        }
     }
 
     private RayTraceResult traceEntity(Player p, double range) {
