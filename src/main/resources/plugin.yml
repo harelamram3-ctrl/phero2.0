@@ -1,0 +1,10 @@
+name: GauntletSockets
+version: 1.0.0
+main: il.harel.gauntletsockets.GauntletSockets
+api-version: '1.21'
+depend: [SuperHeroes, InfinityStones]
+author: Harel
+description: Adds six persistent sockets and an Infinity Gauntlet GUI.
+permissions:
+  gauntletsockets.use:
+    default: true

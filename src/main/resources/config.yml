@@ -1,0 +1,11 @@
+# GUI socket positions (27-slot inventory)
+sockets: [10, 11, 12, 14, 15, 16]
+snap-slot: 13
+messages:
+  opened: '&5כפפת האינסוף נפתחה! הכנס אבנים מהמלאי.'
+  inserted: '&aהכנסת את {stone} לכפפה.'
+  removed: '&eהוצאת את {stone} מהכפפה.'
+  full: '&cכל המשבצות בכפפה מלאות.'
+  missing: '&cחסרות אבנים כדי לבצע Snap.'
+  no-plugin: '&cלא נמצא הפלאגין InfinityStones.'
+  snap: '&6&lINFINITY SNAP!'
